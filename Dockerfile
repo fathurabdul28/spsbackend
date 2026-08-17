@@ -1,20 +1,22 @@
 FROM php:8.3-apache
 
-# Install system dependencies
+# Install system dependencies (termasuk libicu-dev untuk extension intl)
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
     libpq-dev \
+    libicu-dev \
     unzip \
     zip \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions (gd, zip, pdo, pdo_pgsql untuk PostgreSQL, bcmath)
+# Install PHP extensions (gd, zip, pdo, pdo_pgsql, bcmath, intl untuk Filament, exif untuk upload)
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd zip pdo pdo_pgsql bcmath
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install gd zip pdo pdo_pgsql bcmath intl exif
 
 # Enable Apache mod_rewrite untuk routing Laravel
 RUN a2enmod rewrite
