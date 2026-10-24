@@ -23,7 +23,8 @@ class WebSettingSeeder extends Seeder
             'contact_phone' => '081234567890',
             'address' => 'Jl. Kebaikan No. 99, Jakarta Selatan, Indonesia',
             'social_media' => json_encode([
-                'instagram' => 'https://instagram.com/sehatipedulisesama',
+                'instagram' => 'https://www.instagram.com/sehatipedulisesama/',
+                'tiktok' => 'https://www.tiktok.com/@papeha',
                 'facebook' => 'https://facebook.com/sehatipedulisesama',
             ]),
             'created_at' => now(),

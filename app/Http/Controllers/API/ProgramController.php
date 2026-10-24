@@ -38,10 +38,14 @@ class ProgramController extends Controller
                 'target' => 'Rp ' . number_format($program->target_amount, 0, ',', '.'),
                 'target_raw' => $program->target_amount,
                 'collected_raw' => $program->collected_amount ?? 0,
+                'target_amount' => $program->target_amount,
+                'collected_amount' => $program->collected_amount ?? 0,
                 'donors' => $program->donors_count,
                 'category' => $program->category ? $program->category->name : 'Umum',
                 'distribution_date' => $program->distribution_date,
                 'distribution_photos' => $program->distribution_photos,
+                'location' => $program->location,
+                'location_url' => $program->location_url,
             ];
         });
 
@@ -50,7 +54,9 @@ class ProgramController extends Controller
 
     public function show($slug)
     {
-        $program = Program::with('category')->withCount(['donations as donors_count' => function ($query) {
+        $program = Program::with(['category', 'donations' => function ($query) {
+            $query->where('status', 'success')->latest();
+        }])->withCount(['donations as donors_count' => function ($query) {
             $query->where('status', 'success');
         }])->withSum(['donations as collected_amount' => function ($query) {
             $query->where('status', 'success');
@@ -69,10 +75,21 @@ class ProgramController extends Controller
             'target' => 'Rp ' . number_format($program->target_amount, 0, ',', '.'),
             'target_raw' => $program->target_amount,
             'collected_raw' => $program->collected_amount ?? 0,
+            'target_amount' => $program->target_amount,
+            'collected_amount' => $program->collected_amount ?? 0,
             'donors' => $program->donors_count,
+            'recent_donations' => $program->donations->map(function ($d) {
+                return [
+                    'name' => empty($d->donor_name) ? 'Hamba Allah' : $d->donor_name,
+                    'amount' => 'Rp ' . number_format($d->amount, 0, ',', '.'),
+                    'date' => $d->created_at ? $d->created_at->diffForHumans() : 'Hari ini',
+                ];
+            })->values(),
             'category' => $program->category ? $program->category->name : 'Umum',
             'distribution_date' => $program->distribution_date,
             'distribution_photos' => $program->distribution_photos,
+            'location' => $program->location,
+            'location_url' => $program->location_url,
         ];
 
         return response()->json($formattedProgram);

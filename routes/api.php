@@ -30,6 +30,5 @@ Route::get('/programs/{slug}', [ProgramController::class, 'show']);
 
 // API Donasi
 Route::post('/donations', [DonationController::class, 'store']);
-Route::post('/midtrans/webhook', [DonationController::class, 'webhook']);
 Route::post('/donations/{id}/upload-receipt', [DonationController::class, 'uploadReceipt']);
 Route::get('/bank-accounts', function () { return \App\Models\BankAccount::where('is_active', true)->get(); });

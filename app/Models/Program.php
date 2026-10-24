@@ -17,6 +17,8 @@ class Program extends Model
         'image',
         'target_amount',
         'is_active',
+        'location',
+        'location_url',
         'distribution_date',
         'distribution_photos',
     ];
