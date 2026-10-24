@@ -20,7 +20,7 @@ class ProgramSeeder extends Seeder
             'description' => 'Camping Ceria merupakan program kegiatan tahunan yang rutin diselenggarakan untuk menghadirkan keceriaan dan pengalaman berharga bagi anak-anak yatim serta dhuafa. Melalui perkemahan di alam terbuka, aktivitas edukatif, permainan kekompakan, dan malam kebersamaan, program ini bertujuan menumbuhkan rasa percaya diri, kemandirian, serta kehangatan kasih sayang bagi mereka.',
             'location' => 'Lembang / KBB',
             'location_url' => 'https://maps.app.goo.gl/YiQUbcE6jamPasiT9',
-            'distribution_date' => '2026-11-28',
+            'distribution_date' => '2026-11-21',
             'image' => '/santri-adventure-camp.jpg',
             'target_amount' => 35000000,
             'is_active' => true,
