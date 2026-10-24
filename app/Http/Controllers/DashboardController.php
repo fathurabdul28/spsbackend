@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $period = $request->get('period', 'all');
 
         // Main Stat Cards (Filtered according to period)
-        $statQuery = Donation::query()->whereIn('status', ['settlement', 'success']);
+        $statQuery = Donation::query()->whereIn('status', ['settlement', 'success', 'pending']);
         $this->applyPeriodFilter($statQuery, $period);
 
         $totalDonations     = (clone $statQuery)->sum('amount');
@@ -28,7 +28,7 @@ class DashboardController extends Controller
         $totalUsers         = User::count();
 
         // 1. Diagram Batang: Rekap Donasi (Total Terkumpul Rp) per Program
-        $barQuery = Donation::query()->whereIn('status', ['settlement', 'success']);
+        $barQuery = Donation::query()->whereIn('status', ['settlement', 'success', 'pending']);
         $this->applyPeriodFilter($barQuery, $period);
         $barDonations = $barQuery->selectRaw('program_id, sum(amount) as total_amount')
             ->groupBy('program_id')
@@ -43,7 +43,7 @@ class DashboardController extends Controller
         }
 
         // 2. Diagram Lingkaran (Pie/Donut): Jumlah Donatur per Program
-        $pieQuery = Donation::query()->whereIn('status', ['settlement', 'success']);
+        $pieQuery = Donation::query()->whereIn('status', ['settlement', 'success', 'pending']);
         $this->applyPeriodFilter($pieQuery, $period);
         $pieDonations = $pieQuery->selectRaw('program_id, count(distinct donor_email) as total_donors')
             ->groupBy('program_id')

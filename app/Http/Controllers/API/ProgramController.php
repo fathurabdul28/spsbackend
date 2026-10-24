@@ -11,9 +11,9 @@ class ProgramController extends Controller
     public function index(Request $request)
     {
         $query = Program::with('category')->withCount(['donations as donors_count' => function ($query) {
-            $query->where('status', 'success');
+            $query->whereIn('status', ['success', 'pending']);
         }])->withSum(['donations as collected_amount' => function ($query) {
-            $query->where('status', 'success');
+            $query->whereIn('status', ['success', 'pending']);
         }], 'amount')->where('is_active', true);
 
         if ($request->has('category') && $request->category !== 'Semua') {
@@ -55,11 +55,11 @@ class ProgramController extends Controller
     public function show($slug)
     {
         $program = Program::with(['category', 'donations' => function ($query) {
-            $query->where('status', 'success')->latest();
+            $query->whereIn('status', ['success', 'pending'])->latest();
         }])->withCount(['donations as donors_count' => function ($query) {
-            $query->where('status', 'success');
+            $query->whereIn('status', ['success', 'pending']);
         }])->withSum(['donations as collected_amount' => function ($query) {
-            $query->where('status', 'success');
+            $query->whereIn('status', ['success', 'pending']);
         }], 'amount')->where('slug', $slug)->firstOrFail();
 
         $progress = $program->target_amount > 0 ? min(100, ($program->collected_amount / $program->target_amount) * 100) : 0;
