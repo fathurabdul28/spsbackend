@@ -13,10 +13,10 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions (gd, zip, pdo, pdo_pgsql, bcmath, intl untuk Filament, exif untuk upload)
+# Install PHP extensions (gd, zip, pdo, pdo_mysql, pdo_pgsql, bcmath, intl untuk Filament, exif untuk upload)
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install gd zip pdo pdo_pgsql bcmath intl exif
+    && docker-php-ext-install gd zip pdo pdo_mysql pdo_pgsql bcmath intl exif
 
 # Enable Apache mod_rewrite untuk routing Laravel
 RUN a2enmod rewrite
@@ -44,5 +44,5 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 # Expose port default
 EXPOSE 80
 
-# Jalankan migrasi database otomatis saat container start, lalu jalankan Apache
-CMD ["sh", "-c", "php artisan migrate --force && apache2-foreground"]
+# Jalankan storage link, migrasi database otomatis saat container start, lalu jalankan Apache
+CMD ["sh", "-c", "php artisan storage:link || true && php artisan migrate --force && apache2-foreground"]
