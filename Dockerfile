@@ -45,4 +45,4 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 EXPOSE 80
 
 # Jalankan storage link, migrasi database otomatis saat container start, lalu jalankan Apache
-CMD ["sh", "-c", "php artisan storage:link || true && php artisan migrate --force && apache2-foreground"]
+CMD ["sh", "-c", "php artisan storage:link || true && (php artisan migrate --force || true) && apache2-foreground"]
