@@ -13,67 +13,18 @@
     <!-- Styles -->
     <link href="{{ mix('graindashboard/css/graindashboard.css') }}" rel="stylesheet">
 
-    <!-- Dark Mode CSS Overrides -->
-    <style id="darkModeStyles">
-        body.dark-mode {
-            background-color: #0f172a !important;
-            color: #f1f5f9 !important;
-        }
-        body.dark-mode .header {
-            background-color: #1e293b !important;
-            border-color: #334155 !important;
-        }
-        body.dark-mode .side-nav {
-            background-color: #1e293b !important;
-            border-color: #334155 !important;
-        }
-        body.dark-mode .side-nav-menu-link {
-            color: #cbd5e1 !important;
-        }
-        body.dark-mode .side-nav-menu-item.active > .side-nav-menu-link,
-        body.dark-mode .side-nav-menu-link:hover {
-            color: #38bdf8 !important;
-            background-color: #334155 !important;
-        }
-        body.dark-mode .sidebar-heading {
-            color: #64748b !important;
-        }
-        body.dark-mode .card {
-            background-color: #1e293b !important;
-            border-color: #334155 !important;
-            color: #f1f5f9 !important;
-        }
-        body.dark-mode .card-header,
-        body.dark-mode .card-footer {
-            border-color: #334155 !important;
-            background-color: #1e293b !important;
-            color: #f1f5f9 !important;
-        }
-        body.dark-mode .table {
-            color: #e2e8f0 !important;
-        }
-        body.dark-mode .table th,
-        body.dark-mode .table td {
-            border-color: #334155 !important;
-        }
-        body.dark-mode .form-control,
-        body.dark-mode .custom-select {
-            background-color: #0f172a !important;
-            border-color: #334155 !important;
-            color: #f1f5f9 !important;
-        }
-        body.dark-mode .text-dark {
-            color: #f8fafc !important;
-        }
-        body.dark-mode .text-muted {
-            color: #94a3b8 !important;
-        }
-        body.dark-mode .list-group-item {
-            background-color: #1e293b !important;
-            border-color: #334155 !important;
-            color: #f1f5f9 !important;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('css/admin-modern.css') }}?v={{ filemtime(public_path('css/admin-modern.css')) }}" rel="stylesheet">
+    <script>
+        // Terapkan tema sebelum render agar tidak berkedip
+        (function () {
+            try {
+                var t = localStorage.getItem('sps_admin_theme') ||
+                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) {}
+        })();
+    </script>
 </head>
 
   <body class="has-sidebar has-fixed-sidebar-and-header">
@@ -102,45 +53,26 @@
     <!-- Dark/Light Theme Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const themeBtn = document.getElementById('themeToggleBtn');
-            const themeIcon = document.getElementById('themeToggleIcon');
-            const themeText = document.getElementById('themeToggleText');
-            
-            // Check saved theme in localStorage
-            const savedTheme = localStorage.getItem('sps_admin_theme') || 'light';
-            if (savedTheme === 'dark') {
-                applyDarkMode(true);
-            } else {
-                applyDarkMode(false);
+            var root = document.documentElement;
+            var btn = document.getElementById('themeToggleBtn');
+            var icon = document.getElementById('themeToggleIcon');
+            var text = document.getElementById('themeToggleText');
+
+            function render() {
+                var dark = root.getAttribute('data-theme') === 'dark';
+                if (icon) icon.className = (dark ? 'gd-moon' : 'gd-sun') + ' mr-1 text-warning';
+                if (text) text.textContent = dark ? 'Dark' : 'Light';
             }
 
-            if (themeBtn) {
-                themeBtn.addEventListener('click', function () {
-                    const isDark = document.body.classList.contains('dark-mode');
-                    applyDarkMode(!isDark);
-                    localStorage.setItem('sps_admin_theme', !isDark ? 'dark' : 'light');
+            if (btn) {
+                btn.addEventListener('click', function () {
+                    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                    root.setAttribute('data-theme', next);
+                    try { localStorage.setItem('sps_admin_theme', next); } catch (e) {}
+                    render();
                 });
             }
-
-            function applyDarkMode(enableDark) {
-                if (enableDark) {
-                    document.body.classList.add('dark-mode');
-                    if (themeIcon) themeIcon.className = 'gd-moon mr-1 text-warning';
-                    if (themeText) themeText.textContent = 'Dark';
-                    if (themeBtn) {
-                        themeBtn.classList.remove('btn-outline-secondary');
-                        themeBtn.classList.add('btn-outline-light');
-                    }
-                } else {
-                    document.body.classList.remove('dark-mode');
-                    if (themeIcon) themeIcon.className = 'gd-sun mr-1 text-warning';
-                    if (themeText) themeText.textContent = 'Light';
-                    if (themeBtn) {
-                        themeBtn.classList.remove('btn-outline-light');
-                        themeBtn.classList.add('btn-outline-secondary');
-                    }
-                }
-            }
+            render();
         });
     </script>
     @yield('scripts')

@@ -15,14 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@sehatipeduli.org',
-            'password' => bcrypt('password'),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@sehatipeduli.org'],
+            ['name' => 'Admin User', 'password' => bcrypt('password')]
+        );
 
         $this->call([
+            CategorySeeder::class,
+            BankAccountSeeder::class,
             ProgramSeeder::class,
+            DonationSeeder::class,
             WebSettingSeeder::class,
             NewsSeeder::class,
         ]);

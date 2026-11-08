@@ -9,7 +9,7 @@ class NewsSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('news')->insert([
+        $items = [
             [
                 'title' => 'Penyaluran Bantuan Sembako untuk Korban Banjir Demak',
                 'slug' => 'penyaluran-bantuan-sembako-untuk-korban-banjir-demak',
@@ -37,6 +37,10 @@ class NewsSeeder extends Seeder
                 'created_at' => now()->subDays(10),
                 'updated_at' => now()->subDays(10),
             ]
-        ]);
+        ];
+
+        foreach ($items as $item) {
+            DB::table('news')->updateOrInsert(['slug' => $item['slug']], $item);
+        }
     }
 }

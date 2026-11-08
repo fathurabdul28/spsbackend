@@ -9,7 +9,7 @@ class WebSettingSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('web_settings')->insert([
+        DB::table('web_settings')->updateOrInsert(['id' => 1], [
             'about_us_text' => 'Sehati Peduli Sesama adalah yayasan sosial dan kemanusiaan yang hadir sebagai wadah untuk menyalurkan kepedulian kepada masyarakat yang membutuhkan. Berlandaskan nilai kemanusiaan, keikhlasan, dan gotong royong, kami berkomitmen menghadirkan berbagai program sosial yang memberikan manfaat nyata serta mendorong terciptanya kehidupan yang lebih baik. Melalui program di bidang sosial, pendidikan, kesehatan, kebencanaan, dan pemberdayaan masyarakat, kami berupaya menjadi jembatan antara para dermawan dengan mereka yang membutuhkan.',
             'vision' => 'Menjadi lembaga sosial kemanusiaan terpercaya yang berkontribusi aktif dalam mengentaskan kemiskinan dan meningkatkan kesejahteraan masyarakat Indonesia secara berkelanjutan.',
             'mission' => json_encode([
@@ -19,14 +19,13 @@ class WebSettingSeeder extends Seeder
                 'Menyalurkan bantuan tanggap darurat secara cepat dan tepat sasaran bagi korban bencana alam.'
             ]),
             'about_image' => '/tentangkami.png',
-            'contact_email' => 'halo@sehatipeduli.org',
-            'contact_phone' => '081234567890',
-            'address' => 'Jl. Kebaikan No. 99, Jakarta Selatan, Indonesia',
+            'contact_email' => 'info@sehatipeduli.org',
+            'contact_phone' => '+6285862604177',
+            'address' => 'Jl. Babakan Garut, Kelurahan Cibangkong, Kecamatan Batununggal, Kota Bandung, Jawa Barat 40286, Indonesia',
             'social_media' => json_encode([
                 'instagram' => 'https://www.instagram.com/sehatipedulisesama/',
                 'tiktok' => 'https://www.tiktok.com/@papeha',
-                'facebook' => 'https://facebook.com/sehatipedulisesama',
-            ]),
+                            ]),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
